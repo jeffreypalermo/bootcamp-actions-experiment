@@ -1,0 +1,56 @@
+name: Deploy to Prod
+
+on:
+  workflow_call:
+    inputs:
+      major_version:
+        required: true
+        type: string
+      minor_version:
+        required: true
+        type: string
+      run_number:
+        required: true
+        type: string
+    secrets:
+      octo_api_key:
+        required: true
+      octopus_url:
+        required: true
+
+jobs:
+  deploy-to-prod:
+    name: Prod
+    runs-on: ubuntu-latest
+    environment:
+      name: Prod
+    
+    steps:
+      - name: Set Version
+        run: |
+          version="${{ inputs.major_version }}.${{ inputs.minor_version }}.${{ inputs.run_number }}"
+          echo "BUILD_BUILDNUMBER=$version" >> $GITHUB_ENV
+          echo "VERSION=$version" >> $GITHUB_ENV
+          echo "Build version: $version"
+
+      - name: Deploy Octopus Release to Prod
+        uses: OctopusDeploy/deploy-release-action@v3
+        id: start-deploy-to-prod
+        env:
+          OCTOPUS_API_KEY: ${{ secrets.octo_api_key }}
+          OCTOPUS_URL: ${{ secrets.octopus_url }}
+          OCTOPUS_SPACE: ${{ vars.OCTOPUS_SPACE }}
+        with:
+          project: ${{ vars.OCTOPUS_PROJECT }}   
+          release_number: ${{ env.BUILD_BUILDNUMBER }}
+          environments: "Prod"
+
+      - name: Wait for the Prod deployment to complete
+        uses: OctopusDeploy/await-task-action@v3
+        env:
+          OCTOPUS_API_KEY: ${{ secrets.octo_api_key  }}
+          OCTOPUS_URL: ${{ secrets.octopus_url }}
+          OCTOPUS_SPACE: ${{ vars.OCTOPUS_SPACE }}
+        with:
+          server_task_id: ${{ fromJson(steps.start-deploy-to-prod.outputs.server_tasks)[0].serverTaskId }}
+          timeout_after: 1800
