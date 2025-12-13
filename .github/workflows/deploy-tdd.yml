@@ -175,9 +175,6 @@ jobs:
           } finally {
               Pop-Location
           }
-
-          Write-Host "Installing Playwright browsers from $playwrightScript"
-          & pwsh $playwrightScript install --with-deps
           
           
           

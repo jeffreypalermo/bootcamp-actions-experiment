@@ -15,6 +15,10 @@ on:
     secrets:
       github_token:
         required: true
+      octopus_url:
+        required: false
+      octo_api_key:
+        required: false
 
 jobs:
   build-linux:
@@ -160,8 +164,8 @@ jobs:
         shell: pwsh
         if: success()
         env:
-          OCTOPUS_URL: ${{ secrets.OCTOPUS_URL }}
-          OCTOPUS_API_KEY: ${{ secrets.OCTO_API_KEY }}
+          OCTOPUS_URL: ${{ secrets.octopus_url }}
+          OCTOPUS_API_KEY: ${{ secrets.octo_api_key }}
           OCTOPUS_SPACE: ${{ vars.OCTOPUS_SPACE }}
           BUILD_BUILDNUMBER: ${{ env.VERSION }}
         run: |

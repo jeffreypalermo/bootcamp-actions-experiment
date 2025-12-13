@@ -20,6 +20,8 @@ jobs:
       run_number: ${{ github.run_number }}
     secrets:
       github_token: ${{ secrets.GITHUB_TOKEN }}
+      octopus_url: ${{ secrets.OCTOPUS_URL }}
+      octo_api_key: ${{ secrets.OCTO_API_KEY }}
 
   docker-build-image-for-churchbulletin-ui:
     name: Publish Release Candidate
