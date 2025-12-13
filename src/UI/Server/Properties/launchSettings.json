@@ -1,0 +1,36 @@
+{
+  "profiles": {
+    "UI.Server": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ConnectionStrings__SqlConnectionString": "server=(LocalDb)\\MSSQLLocalDB;database=ChurchBulletin;Integrated Security=true;",
+        "APPLICATIONINSIGHTS_CONNECTION_STRING": "InstrumentationKey=586d68ed-85bc-4092-ac8a-fabb7a583e93;IngestionEndpoint=https://centralus-2.in.applicationinsights.azure.com/;LiveEndpoint=https://centralus.livediagnostics.monitor.azure.com/;ApplicationId=5328e763-3c56-4eae-ad66-aa528a92e984",
+        "AI_OpenAI_ApiKey": "",
+        "AI_OpenAI_Url": "https://ai-openai-temp-test.openai.azure.com/",
+        "AI_OpenAI_Model": "gpt-4o-mini"
+
+      },
+      "dotnetRunMessages": true,
+      "inspectUri": "{wsProtocol}://{url.hostname}:{url.port}/_framework/debug/ws-proxy?browser={browserInspectUri}",
+      "applicationUrl": "https://localhost:7174;http://localhost:5174"
+    },
+    "IIS Express": {
+      "commandName": "IISExpress",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "inspectUri": "{wsProtocol}://{url.hostname}:{url.port}/_framework/debug/ws-proxy?browser={browserInspectUri}"
+    }
+  },
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:38530",
+      "sslPort": 44357
+    }
+  }
+}
