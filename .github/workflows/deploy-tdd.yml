@@ -176,8 +176,6 @@ jobs:
               Pop-Location
           }
           
-          
-          
           # Now run the acceptance tests
           Write-Host "Running acceptance tests on TDD at ${{ env.ApplicationBaseUrl }}, settings file: $runSettingsPath"
 

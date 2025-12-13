@@ -48,7 +48,7 @@ jobs:
       - name: Wait for the UAT deployment to complete
         uses: OctopusDeploy/await-task-action@v3
         env:
-          OCTOPUS_API_KEY: ${{ secrets.octo_api_key  }}
+          OCTOPUS_API_KEY: ${{ secrets.octo_api_key }}
           OCTOPUS_URL: ${{ secrets.octopus_url }}
           OCTOPUS_SPACE: ${{ vars.OCTOPUS_SPACE }}
         with:
