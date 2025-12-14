@@ -221,11 +221,10 @@
 
     private void StartGame()
     {
-        var random = new Random();
-        _impostorIndex = random.Next(0, _selectedPlayerCount);
+        _impostorIndex = Random.Shared.Next(0, _selectedPlayerCount);
         
         var words = _wordBanks[_selectedTheme];
-        _secretWord = words[random.Next(words.Count)];
+        _secretWord = words[Random.Shared.Next(words.Count)];
         
         _currentPlayer = 0;
         _wordRevealed = false;
