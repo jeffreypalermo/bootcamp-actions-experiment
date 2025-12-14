@@ -1,0 +1,270 @@
+@page "/impostor-game"
+
+<PageTitle>Impostor Game</PageTitle>
+
+<div class="impostor-page">
+    <div class="impostor-container">
+        <div class="impostor-header">
+            <h2>🎭 Impostor Game</h2>
+            <div class="impostor-subtitle">Find the impostor among you!</div>
+        </div>
+
+        @if (_gameState == GameState.Setup)
+        {
+            <div class="setup-card">
+                <h3>Game Setup</h3>
+                
+                <div class="form-group">
+                    <label for="playerCount">Number of Players:</label>
+                    <select id="playerCount" class="form-control" @bind="_selectedPlayerCount">
+                        @for (int i = 2; i <= 10; i++)
+                        {
+                            <option value="@i">@i Players</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="theme">Theme:</label>
+                    <select id="theme" class="form-control" @bind="_selectedTheme">
+                        <option value="Technology">Technology</option>
+                        <option value="Animals">Animals</option>
+                        <option value="People">People</option>
+                        <option value="Sports">Sports</option>
+                        <option value="OldTestament">Old Testament</option>
+                        <option value="NewTestament">New Testament</option>
+                        <option value="Jesus">Jesus</option>
+                        <option value="TheFlood">The Flood</option>
+                        <option value="Revelation">Revelation</option>
+                    </select>
+                </div>
+
+                <button class="btn btn-primary start-btn" @onclick="StartGame">
+                    🎮 Start Game
+                </button>
+            </div>
+        }
+        else if (_gameState == GameState.PlayerReveal)
+        {
+            <div class="reveal-card">
+                <h3>Player @(_currentPlayer + 1) of @_selectedPlayerCount</h3>
+                
+                @if (!_wordRevealed)
+                {
+                    <div class="reveal-instructions">
+                        <p>Player @(_currentPlayer + 1), get ready!</p>
+                        <p>Press the button below to see your word.</p>
+                        <p class="warning-text">⚠️ Keep it secret from other players!</p>
+                    </div>
+                    
+                    <button class="btn btn-primary reveal-btn" @onclick="RevealWord">
+                        👁️ Reveal My Word
+                    </button>
+                }
+                else
+                {
+                    <div class="word-display">
+                        @if (_currentPlayer == _impostorIndex)
+                        {
+                            <div class="impostor-message">
+                                <h2>🎭 YOU ARE THE IMPOSTOR!</h2>
+                                <p>Try to blend in and figure out what the secret word is!</p>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="secret-word">
+                                <h2>@_secretWord</h2>
+                            </div>
+                        }
+                    </div>
+                    
+                    <button class="btn btn-secondary hide-btn" @onclick="HideWord">
+                        🙈 Hide Word & Pass Device
+                    </button>
+                }
+            </div>
+        }
+        else if (_gameState == GameState.Playing)
+        {
+            <div class="playing-card">
+                <h3>🎮 Game in Progress</h3>
+                
+                <div class="game-info">
+                    <div class="info-item">
+                        <strong>Players:</strong> @_selectedPlayerCount
+                    </div>
+                    <div class="info-item">
+                        <strong>Theme:</strong> @GetThemeDisplayName(_selectedTheme)
+                    </div>
+                </div>
+
+                <div class="instructions">
+                    <h4>How to Play:</h4>
+                    <ol>
+                        <li>Each player takes turns describing the secret word without saying it directly</li>
+                        <li>The impostor must try to blend in without knowing the word</li>
+                        <li>After discussion, vote on who you think the impostor is</li>
+                        <li>If the impostor is found, the group wins! If not, the impostor wins!</li>
+                    </ol>
+                </div>
+
+                <button class="btn btn-danger reset-btn" @onclick="ResetGame">
+                    🔄 Reset Game
+                </button>
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    private enum GameState
+    {
+        Setup,
+        PlayerReveal,
+        Playing
+    }
+
+    private GameState _gameState = GameState.Setup;
+    private int _selectedPlayerCount = 4;
+    private string _selectedTheme = "Technology";
+    private int _currentPlayer = 0;
+    private int _impostorIndex = 0;
+    private string _secretWord = "";
+    private bool _wordRevealed = false;
+
+    private readonly Dictionary<string, List<string>> _wordBanks = new()
+    {
+        ["Technology"] = new List<string>
+        {
+            "Computer", "Smartphone", "Internet", "Laptop", "Keyboard", "Mouse", "Monitor", "Tablet", "Router", "Server",
+            "Database", "Algorithm", "Programming", "Software", "Hardware", "Application", "Website", "Browser", "Email", "Cloud",
+            "Processor", "Memory", "Storage", "Network", "WiFi", "Bluetooth", "USB", "Cable", "Charger", "Battery",
+            "Operating System", "Windows", "Linux", "MacOS", "Android", "iOS", "JavaScript", "Python", "Java", "C++",
+            "Artificial Intelligence", "Machine Learning", "Virtual Reality", "Augmented Reality", "Blockchain", "Cryptocurrency", "Bitcoin", "Ethernet", "Firewall", "Antivirus",
+            "Backup", "Update", "Download", "Upload", "Streaming", "Gaming", "Console", "Headphones", "Microphone", "Webcam"
+        },
+        ["Animals"] = new List<string>
+        {
+            "Dog", "Cat", "Elephant", "Lion", "Tiger", "Bear", "Wolf", "Fox", "Rabbit", "Squirrel",
+            "Horse", "Cow", "Pig", "Sheep", "Goat", "Chicken", "Duck", "Goose", "Turkey", "Peacock",
+            "Eagle", "Hawk", "Owl", "Parrot", "Sparrow", "Penguin", "Ostrich", "Flamingo", "Pelican", "Seagull",
+            "Whale", "Dolphin", "Shark", "Octopus", "Jellyfish", "Starfish", "Crab", "Lobster", "Shrimp", "Fish",
+            "Butterfly", "Bee", "Ant", "Spider", "Ladybug", "Dragonfly", "Grasshopper", "Cricket", "Beetle", "Moth",
+            "Snake", "Lizard", "Turtle", "Frog", "Crocodile", "Alligator", "Iguana", "Chameleon", "Salamander", "Gecko"
+        },
+        ["People"] = new List<string>
+        {
+            "Teacher", "Doctor", "Nurse", "Engineer", "Lawyer", "Chef", "Firefighter", "Police Officer", "Soldier", "Pilot",
+            "Farmer", "Artist", "Musician", "Actor", "Writer", "Journalist", "Photographer", "Designer", "Architect", "Accountant",
+            "Plumber", "Electrician", "Carpenter", "Mechanic", "Builder", "Painter", "Gardener", "Janitor", "Barber", "Hairdresser",
+            "Dentist", "Pharmacist", "Veterinarian", "Scientist", "Professor", "Librarian", "Coach", "Athlete", "Dancer", "Singer",
+            "Cashier", "Waiter", "Bartender", "Baker", "Butcher", "Delivery Driver", "Bus Driver", "Taxi Driver", "Sailor", "Fisherman",
+            "Programmer", "Manager", "Secretary", "Receptionist", "Customer Service", "Sales Person", "Banker", "Judge", "Mayor", "President"
+        },
+        ["Sports"] = new List<string>
+        {
+            "Soccer", "Basketball", "Football", "Baseball", "Tennis", "Volleyball", "Golf", "Hockey", "Cricket", "Rugby",
+            "Swimming", "Diving", "Surfing", "Skiing", "Snowboarding", "Skating", "Gymnastics", "Wrestling", "Boxing", "Martial Arts",
+            "Running", "Marathon", "Sprinting", "Jogging", "Cycling", "Mountain Biking", "BMX", "Skateboarding", "Rollerblading", "Archery",
+            "Bowling", "Billiards", "Darts", "Table Tennis", "Badminton", "Squash", "Racquetball", "Lacrosse", "Polo", "Rowing",
+            "Kayaking", "Canoeing", "Sailing", "Windsurfing", "Rock Climbing", "Mountaineering", "Hiking", "Camping", "Fishing", "Hunting",
+            "Fencing", "Judo", "Karate", "Taekwondo", "Weightlifting", "Powerlifting", "Bodybuilding", "CrossFit", "Yoga", "Pilates"
+        },
+        ["OldTestament"] = new List<string>
+        {
+            "Adam", "Eve", "Noah", "Abraham", "Isaac", "Jacob", "Joseph", "Moses", "Aaron", "Joshua",
+            "Samuel", "Saul", "David", "Solomon", "Elijah", "Elisha", "Isaiah", "Jeremiah", "Ezekiel", "Daniel",
+            "Creation", "Garden of Eden", "Serpent", "Forbidden Fruit", "Cain", "Abel", "Ark", "Rainbow", "Covenant", "Tower of Babel",
+            "Sodom", "Gomorrah", "Sarah", "Hagar", "Ishmael", "Esau", "Rachel", "Leah", "Benjamin", "Egypt",
+            "Pharaoh", "Plagues", "Passover", "Red Sea", "Exodus", "Manna", "Ten Commandments", "Golden Calf", "Tabernacle", "Promised Land",
+            "Jericho", "Samson", "Delilah", "Ruth", "Boaz", "Hannah", "Goliath", "Bathsheba", "Temple", "Wisdom"
+        },
+        ["NewTestament"] = new List<string>
+        {
+            "Matthew", "Mark", "Luke", "John", "Peter", "Paul", "James", "Andrew", "Philip", "Thomas",
+            "Bartholomew", "Simon", "Judas", "Mary Magdalene", "Martha", "Lazarus", "Nicodemus", "Zacchaeus", "Barnabas", "Timothy",
+            "Bethlehem", "Nazareth", "Jerusalem", "Galilee", "Capernaum", "Bethany", "Gethsemane", "Golgotha", "Emmaus", "Damascus",
+            "Gospel", "Parable", "Miracle", "Sermon", "Beatitudes", "Prayer", "Faith", "Hope", "Love", "Grace",
+            "Baptism", "Temptation", "Transfiguration", "Crucifixion", "Resurrection", "Ascension", "Pentecost", "Holy Spirit", "Church", "Apostle",
+            "Disciple", "Pharisee", "Sadducee", "Scribe", "Tax Collector", "Centurion", "Leper", "Blind Man", "Paralytic", "Prodigal Son"
+        },
+        ["Jesus"] = new List<string>
+        {
+            "Messiah", "Savior", "Christ", "Son of God", "Son of Man", "Lamb of God", "Good Shepherd", "Light of the World", "Bread of Life", "Living Water",
+            "King of Kings", "Lord of Lords", "Alpha and Omega", "Emmanuel", "Wonderful Counselor", "Prince of Peace", "Mighty God", "Everlasting Father", "Teacher", "Rabbi",
+            "Birth", "Manger", "Star", "Wise Men", "Shepherds", "Angels", "Mary", "Joseph", "Elizabeth", "John the Baptist",
+            "Baptism", "Jordan River", "Dove", "Temptation", "Wilderness", "Satan", "Ministry", "Disciples", "Apostles", "Followers",
+            "Healing", "Miracles", "Water into Wine", "Walking on Water", "Feeding Five Thousand", "Raising the Dead", "Calming the Storm", "Casting Out Demons", "Touching Lepers", "Giving Sight",
+            "Cross", "Crown of Thorns", "Nails", "Tomb", "Stone Rolled Away", "Resurrection", "Appeared", "Ascension", "Return", "Second Coming"
+        },
+        ["TheFlood"] = new List<string>
+        {
+            "Noah", "Ark", "Rain", "Forty Days", "Forty Nights", "Flood", "Waters", "Deluge", "Wickedness", "Righteousness",
+            "Covenant", "Rainbow", "Animals", "Two by Two", "Male and Female", "Clean Animals", "Unclean Animals", "Birds", "Beasts", "Creatures",
+            "Gopher Wood", "Pitch", "Cubits", "Three Stories", "Window", "Door", "Rooms", "Construction", "Building", "Obedience",
+            "Family", "Sons", "Shem", "Ham", "Japheth", "Wife", "Daughters-in-law", "Eight People", "Saved", "Preserved",
+            "Fountains", "Deep", "Windows of Heaven", "Opened", "Prevailed", "Mountains", "Covered", "Ararat", "Rested", "Receded",
+            "Raven", "Dove", "Olive Leaf", "Dry Land", "Exit", "Altar", "Sacrifice", "Offering", "Promise", "Never Again"
+        },
+        ["Revelation"] = new List<string>
+        {
+            "John", "Patmos", "Vision", "Prophecy", "Seven Churches", "Ephesus", "Smyrna", "Pergamum", "Thyatira", "Sardis",
+            "Philadelphia", "Laodicea", "Letters", "Angel", "Lampstand", "Stars", "Throne", "Elders", "Living Creatures", "Worship",
+            "Scroll", "Seven Seals", "Lamb", "Worthy", "Four Horsemen", "White Horse", "Red Horse", "Black Horse", "Pale Horse", "Martyrs",
+            "Earthquake", "Sun Darkened", "Moon Blood", "Stars Fell", "Sky Rolled Up", "Mountains Moved", "Silence", "Seven Trumpets", "Hail", "Fire",
+            "Sea to Blood", "Wormwood", "Darkness", "Locusts", "Abyss", "Scorpions", "Torment", "Army", "River Euphrates", "Two Witnesses",
+            "Dragon", "Beast", "Mark", "666", "False Prophet", "Battle", "Armageddon", "Babylon", "Fall", "New Heaven",
+            "New Earth", "New Jerusalem", "Holy City", "River of Life", "Tree of Life", "No More Death", "No More Pain", "Alpha and Omega", "Come Lord Jesus", "Amen"
+        }
+    };
+
+    private void StartGame()
+    {
+        var random = new Random();
+        _impostorIndex = random.Next(0, _selectedPlayerCount);
+        
+        var words = _wordBanks[_selectedTheme];
+        _secretWord = words[random.Next(words.Count)];
+        
+        _currentPlayer = 0;
+        _wordRevealed = false;
+        _gameState = GameState.PlayerReveal;
+    }
+
+    private void RevealWord()
+    {
+        _wordRevealed = true;
+    }
+
+    private void HideWord()
+    {
+        _wordRevealed = false;
+        _currentPlayer++;
+        
+        if (_currentPlayer >= _selectedPlayerCount)
+        {
+            _gameState = GameState.Playing;
+        }
+    }
+
+    private void ResetGame()
+    {
+        _gameState = GameState.Setup;
+        _currentPlayer = 0;
+        _impostorIndex = 0;
+        _secretWord = "";
+        _wordRevealed = false;
+    }
+
+    private string GetThemeDisplayName(string theme)
+    {
+        return theme switch
+        {
+            "OldTestament" => "Old Testament",
+            "NewTestament" => "New Testament",
+            "TheFlood" => "The Flood",
+            _ => theme
+        };
+    }
+}
