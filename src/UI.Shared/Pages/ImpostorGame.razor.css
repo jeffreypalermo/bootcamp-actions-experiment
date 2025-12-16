@@ -1,0 +1,281 @@
+.impostor-page {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    min-height: 100vh;
+    padding: 2rem;
+}
+
+.impostor-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.impostor-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: white;
+}
+
+.impostor-header h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    font-family: 'Georgia', serif;
+    margin-bottom: 0.5rem;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.impostor-subtitle {
+    font-size: 1.1rem;
+    color: #a8dadc;
+    font-style: italic;
+}
+
+.setup-card,
+.reveal-card,
+.playing-card {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    padding: 3rem;
+    border: 1px solid #457b9d;
+}
+
+.setup-card h3,
+.reveal-card h3,
+.playing-card h3 {
+    color: #1d3557;
+    font-family: 'Georgia', serif;
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 600;
+    color: #1d3557;
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1rem;
+    border: 2px solid #a8dadc;
+    border-radius: 8px;
+    background: white;
+    color: #1d3557;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: #457b9d;
+    box-shadow: 0 0 0 3px rgba(69, 123, 157, 0.1);
+}
+
+.start-btn,
+.reveal-btn,
+.hide-btn,
+.reset-btn {
+    width: 100%;
+    padding: 1rem 2rem;
+    font-size: 1.2rem;
+    font-weight: 600;
+    border-radius: 12px;
+    border: none;
+    margin-top: 1.5rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.start-btn,
+.reveal-btn {
+    background: linear-gradient(135deg, #e63946 0%, #f77f00 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(230, 57, 70, 0.3);
+}
+
+.start-btn:hover,
+.reveal-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(230, 57, 70, 0.4);
+}
+
+.hide-btn {
+    background: linear-gradient(135deg, #457b9d 0%, #1d3557 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(69, 123, 157, 0.3);
+}
+
+.hide-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(69, 123, 157, 0.4);
+}
+
+.reset-btn {
+    background: linear-gradient(135deg, #e63946 0%, #d62828 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(230, 57, 70, 0.3);
+}
+
+.reset-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(230, 57, 70, 0.4);
+}
+
+.reveal-instructions {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.reveal-instructions p {
+    font-size: 1.2rem;
+    color: #1d3557;
+    margin-bottom: 1rem;
+}
+
+.warning-text {
+    color: #e63946;
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.word-display {
+    text-align: center;
+    margin: 2rem 0;
+    padding: 2rem;
+    background: linear-gradient(135deg, #f1faee 0%, #a8dadc 100%);
+    border-radius: 15px;
+    min-height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.secret-word h2 {
+    font-size: 3rem;
+    font-weight: 700;
+    color: #1d3557;
+    text-shadow: 2px 2px 4px rgba(29, 53, 87, 0.2);
+}
+
+.impostor-message {
+    text-align: center;
+}
+
+.impostor-message h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #e63946;
+    margin-bottom: 1rem;
+    animation: pulse 2s infinite;
+}
+
+.impostor-message p {
+    font-size: 1.3rem;
+    color: #1d3557;
+    font-weight: 600;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+.game-info {
+    background: linear-gradient(135deg, #f1faee 0%, #a8dadc 100%);
+    padding: 1.5rem;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+}
+
+.info-item {
+    font-size: 1.1rem;
+    color: #1d3557;
+    margin-bottom: 0.5rem;
+    padding: 0.5rem;
+}
+
+.info-item strong {
+    color: #e63946;
+}
+
+.instructions {
+    margin-bottom: 2rem;
+}
+
+.instructions h4 {
+    color: #1d3557;
+    font-family: 'Georgia', serif;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.instructions ol {
+    color: #1d3557;
+    line-height: 1.8;
+    padding-left: 1.5rem;
+}
+
+.instructions ol li {
+    margin-bottom: 0.75rem;
+    font-size: 1.05rem;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .impostor-page {
+        padding: 1rem;
+    }
+    
+    .impostor-header h2 {
+        font-size: 2rem;
+    }
+    
+    .setup-card,
+    .reveal-card,
+    .playing-card {
+        padding: 2rem;
+    }
+    
+    .secret-word h2 {
+        font-size: 2rem;
+    }
+    
+    .impostor-message h2 {
+        font-size: 1.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .impostor-header h2 {
+        font-size: 1.5rem;
+    }
+    
+    .setup-card,
+    .reveal-card,
+    .playing-card {
+        padding: 1.5rem;
+    }
+    
+    .secret-word h2 {
+        font-size: 1.5rem;
+    }
+    
+    .impostor-message h2 {
+        font-size: 1.5rem;
+    }
+    
+    .impostor-message p {
+        font-size: 1rem;
+    }
+}
