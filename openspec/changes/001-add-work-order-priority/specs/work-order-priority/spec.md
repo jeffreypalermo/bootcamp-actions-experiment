@@ -159,7 +159,7 @@ THEN the displayed priority text SHALL be "High"
 
 ```sql
 ALTER TABLE [dbo].[WorkOrder]
-    ADD [Priority] CHAR(3) NOT NULL DEFAULT 'NRM';
+	ADD [Priority] CHAR(3) NOT NULL DEFAULT 'NRM';
 ```
 
 ### WorkOrderPriority Class (New)
